@@ -10,7 +10,7 @@
 
 
 // ================= CONFIG =================
-const int IPF = 4;
+const int IPF = 11;
 const int scale = 10;
 
 // colors
@@ -111,11 +111,19 @@ SDL_Rect pixel = (SDL_Rect) {1, 1, scale, scale};
 int main (int argc, char *argv[]){
 	
 	int running = 1;
+	int clock;
 
 	//sanity check
 	if (argc < 2){
 		printf("Usage: ./chip8 rom.ch8 clockspeed");
 		return 1;
+	}
+	else if (argc == 3) {
+		clock = atoi(argv[2]);
+		//printf("%d\n", clock);
+	}
+	else {
+		clock = 500;
 	}
 
 	
@@ -141,8 +149,54 @@ int main (int argc, char *argv[]){
 	//60Hz clock (1000/60)
 	const Uint32 frame_interval = 1000 / 60;
 	Uint32 next_frame = SDL_GetTicks() + frame_interval;
-	
+	//cpu clock, default 500, can be set with argv[2]
+	//const Uint32 cpu_interval = 1000 / clock;
+	//Uint32 next_cpu = SDL_GetTicks() + cpu_interval;
+
 	Uint32 curr_tick = SDL_GetTicks();
+
+	//main loop
+	/*while (running) {
+		//exit with close button
+		while(SDL_PollEvent(&event)) {
+			if (event.type == SDL_QUIT) {running = 0;}
+			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {running = 0;}
+		
+		}
+		
+		SDL_PumpEvents();
+                update_keys();
+		
+		curr_tick = SDL_GetTicks();
+		
+		//cpu clock
+		if (SDL_TICKS_PASSED(curr_tick, next_cpu)) {
+                        //run cpu cycle
+                        Execute();
+			next_cpu += cpu_interval;
+		}
+
+		curr_tick = SDL_GetTicks();	
+
+		//on 60Hz
+		if (SDL_TICKS_PASSED(curr_tick, next_frame)){
+			//decrement timers
+			if (DT != 0) {
+				DT--;
+			}
+			if (ST != 0) {
+				ST--;
+				printf("\a");
+				fflush(stdout);
+			}
+                        Render(psurface);
+			
+
+                        SDL_UpdateWindowSurface(pwindow);
+			next_frame += frame_interval;
+		}
+
+	}*/ 
 
 	while (running) {
                 //exit with close button
