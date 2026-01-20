@@ -1,8 +1,6 @@
 void Execute(int IPF) {
 
 for (inst = 0; inst < IPF; inst++) {
-	if (PC > 0xFFF) {return;}
-	
 	/*printf("Stack:\n");
 	for (i = 0; i <= 15; i++) {
 		printf("0x%01X = %03X  ", i, stack[i]);
@@ -19,6 +17,7 @@ for (inst = 0; inst < IPF; inst++) {
 
 	opcode_high = mem[PC];
 	opcode_low = mem[PC+1];
+	//PC += 0x2;
 	opcode = (opcode_high << 8) | opcode_low;
 
 	n1 = (opcode & 0xF000) >> 12;
@@ -39,6 +38,7 @@ for (inst = 0; inst < IPF; inst++) {
 					//decrement SP (index of stack top)
 					SP--;
 					PC = stack[SP];
+					
 
 					printf("RET\n");
 						
@@ -47,8 +47,8 @@ for (inst = 0; inst < IPF; inst++) {
 					//00E0 - CLS
 					////Clear the display
 					fill = 1;
-					printf("CLS\n");
 					PC += 0x2;
+					printf("CLS\n");
 				}
 			
 			break;
@@ -422,6 +422,7 @@ for (inst = 0; inst < IPF; inst++) {
                                                 mem[I + i] = V[i];
 
                                         }
+					I += (Vx + 1);
                                         printf("LD [I], V%01X\n", Vx);
                                         PC += 0x2;
 					break;
@@ -432,6 +433,7 @@ for (inst = 0; inst < IPF; inst++) {
 						V[i]= mem[I + i];
 
 					}
+					I += (Vx + 1);
 					printf("LD V%01X, [I]\n", Vx);
 					PC += 0x2;		
 					break;
